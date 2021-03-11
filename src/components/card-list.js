@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Card from "./card";
 
 
+
 const CardList = ({filmsData, getLessText}) => {
 
     const elements = filmsData.map((el) => (
@@ -12,8 +13,9 @@ const CardList = ({filmsData, getLessText}) => {
                 getLessText={getLessText}
                 genres={el.genres}
                 key={el.id}
-                poster={el.poster_path}/>
-            ))
+                poster={el.poster_path}
+                />
+                ))
     return (
         <div className='container'>
             {elements}
@@ -23,11 +25,13 @@ const CardList = ({filmsData, getLessText}) => {
 
 }
 CardList.defaultProps = {
-    filmsData: [],
-    getLessText: null
+    filmsData: null,
+    getLessText: null,
+
 }
 CardList.propTypes = {
-    filmsData: PropTypes.arrayOf,
-    getLessText: PropTypes.func
+    filmsData: PropTypes.arrayOf(Object),
+    getLessText: PropTypes.func,
+
 }
 export default CardList;
