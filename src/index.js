@@ -17,7 +17,7 @@ class App extends Component {
 
     state = {
         filmsData: [],
-        isLoading: false,
+        isLoading: true,
         isError: false,
     }
 
