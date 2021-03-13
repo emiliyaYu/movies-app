@@ -4,17 +4,17 @@ import Card from "./card";
 
 
 
+
 const CardList = ({filmsData, getLessText}) => {
 
     const elements = filmsData.map((el) => (
                 <Card title={el.title}
-                description={el.overview}
-                date={el.release_date}
-                getLessText={getLessText}
-                genres={el.genres}
-                key={el.id}
-                poster={el.poster_path}
-                />
+                    description={el.overview}
+                    date={el.release_date}
+                    getLessText={getLessText}
+                    genres={el.genres}
+                    key={el.id}
+                    poster={el.poster_path}/>
                 ))
     return (
         <div className='container'>
@@ -27,11 +27,9 @@ const CardList = ({filmsData, getLessText}) => {
 CardList.defaultProps = {
     filmsData: null,
     getLessText: null,
-
 }
 CardList.propTypes = {
     filmsData: PropTypes.arrayOf(Object),
     getLessText: PropTypes.func,
-
 }
 export default CardList;

@@ -9,8 +9,18 @@ body {
 }
 .wrapper {
      position: relative;
- }
-
+}
+.pagination {
+    align-self: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+.search {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    width: 930px;
+    align-self: center;
+}
 .load {
     position: absolute;
     top: 50%;
