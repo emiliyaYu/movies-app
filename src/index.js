@@ -23,12 +23,15 @@ class App extends Component {
         filmsData: [],
         isLoading: true,
         isError: false,
+        currentValue: '',
+        page: 1,
     }
 
 
     componentDidMount() {
         this.handleGetMovies();
     }
+
 
     handleError = () => {
         this.setState({
@@ -37,64 +40,71 @@ class App extends Component {
     }
 
 
-
     handleGetMovies = async () => {
         try {
-            const data = await this.service.getRequest(`https://api.themoviedb.org/3/movie/popular?api_key=0182a56e634228c21690fb3267265463&page=1`);
-            const newData = data.results;
-            const idData = newData.map((el) => el.id);
-            const allMovies = [];
-            for(let i = 0; i < idData.length; i++) {
-                allMovies.push(this.allMovies.getRequest(`https://api.themoviedb.org/3/movie/${idData[i]}r?api_key=0182a56e634228c21690fb3267265463`));
-            }
-            const movieData = [...await Promise.all(allMovies)];
+            const data = await this.service.getMovies();
 
+            const movieData = await this.service.getMoviesById(data);
             this.setState(() => ({
                 filmsData: movieData,
                 isLoading: false
             }))
         }
-        catch (err) {
-            this.handleError(err)
+        catch {
+            this.handleError();
         }
 
     }
 
-    handleSearch = async (e) => {
-        try {
-            const data = await this.service.getRequest(`https://api.themoviedb.org/3/search/movie?api_key=0182a56e634228c21690fb3267265463&query=${e.target.value}&page=${1}`);
-            const newData = data.results;
-            const idData = newData.map((el) => el.id);
-            const allMovies = [];
-            for(let i = 0; i < idData.length; i++) {
-                allMovies.push(this.allMovies.getRequest(`https://api.themoviedb.org/3/movie/${idData[i]}r?api_key=0182a56e634228c21690fb3267265463`));
-            }
-            const movieData = [...await Promise.all(allMovies)];
+    handleSearch = async (event) => {
 
-            this.setState(() => ({
-                filmsData: movieData,
-                isLoading: false
-            }))
-        }
-         catch (err) {
-          this.handleError(err)
-        }
+        const targetValue = event.target.value;
+
+        const newData = await this.service.getMoviesFromSearch(targetValue);
+
+        this.setState(() => ({
+            filmsData: newData,
+            currentValue: targetValue,
+            page: 1
+        }))
 
     }
 
     handleChangePage = async (pageNumber) => {
-        const data = await this.service.getRequest(`https://api.themoviedb.org/3/movie/popular?api_key=0182a56e634228c21690fb3267265463&page=${pageNumber}`);
-        const newData = data.results;
-        const idData = newData.map((el) => el.id);
-        const allMovies = [];
+        if(this.state.currentValue === '') {
 
-        for(let i = 0; i < idData.length; i++) {
-            allMovies.push(this.allMovies.getRequest(`https://api.themoviedb.org/3/movie/${idData[i]}r?api_key=0182a56e634228c21690fb3267265463`));
-        }
-        const movieData = [...await Promise.all(allMovies)];
-        this.setState(() => ({
-                filmsData: movieData
+            this.setState(() => ({
+                isLoading: true
             }))
+
+            const data = await this.service.getChangePage(pageNumber);
+
+            this.setState(() => ({
+                filmsData: data,
+                isLoading: false,
+                page: pageNumber
+            }))
+        }
+        if(this.state.currentValue !== '') {
+            const targetValue = this.state.currentValue;
+
+            this.setState(() => ({
+                isLoading: true,
+                page: 1,
+                currentValue: targetValue
+            }))
+
+            const data = await this.service.getChangePageOnSearch(pageNumber, targetValue);
+
+            this.setState(() => ({
+                filmsData: data,
+                isLoading: false,
+                page: pageNumber,
+                currentValue: targetValue
+            }))
+        }
+
+
     }
 
     handleGetLessText = (text) => {
@@ -110,18 +120,17 @@ class App extends Component {
 
     render() {
 
-        const { isLoading, isError } = this.state;
+         const { isLoading ,isError } = this.state;
 
-        if(isLoading) return <Spinner/>;
+        if(isLoading) return <Spinner />
         if(isError) return <ErrorMessage/>;
-
         return (
            <div className='list-film'>
                <Search onSearch={this.handleSearch}/>
                 <CardList filmsData={this.state.filmsData}
                           getLessText={this.handleGetLessText}
                           onLoad={this.state.isLoading}/>
-                <MainPagination onChangePage={this.handleChangePage}/>
+                <MainPagination onChangePage={this.handleChangePage} page={this.state.page}/>
            </div>
         )
    }
