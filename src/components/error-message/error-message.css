@@ -1,0 +1,8 @@
+.error {
+    position: absolute;
+    width: 1440px;
+    height: 300px;
+    top: 30%;
+    left:-900px;
+
+}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Alert } from 'antd';
+import './error-message.css';
 
 const ErrorMessage = () => (
         <div className='error'>

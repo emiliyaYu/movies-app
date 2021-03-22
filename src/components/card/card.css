@@ -1,0 +1,112 @@
+.card {
+    display: flex;
+    width: 451px;
+    height: 298px;
+    background-color: white;
+    box-shadow: 4px 0 20px -6px rgba(210, 213, 217, 0.6);
+    margin-bottom: 34px;
+}
+@media (max-width: 430px) {
+    .card{
+        width: 380px;
+        height: 245px;
+        margin-bottom: 10px;
+        align-self: center;
+    }
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-top: 6px;
+}
+.image {
+    width: 183px;
+    height: 281px;
+}
+@media (max-width: 430px) {
+    .image{
+        margin-left: 5px;
+        width: 60px;
+        height: 91px
+    }
+}
+.title {
+    font-size: 22px;
+    line-height: 28px;
+    margin-bottom: 5px;
+    position: relative;
+}
+@media (max-width: 430px) {
+    .title{
+      font-size: 20px;
+        margin-bottom: 0;
+    }
+}
+
+.description {
+    font-size: 12px;
+    line-height: 22px;
+    max-width: 228px;
+    max-height: 129px;
+    overflow-wrap: break-word;
+    margin-top: 5px;
+}
+@media (max-width: 430px) {
+    .description{
+        max-width: 367px;
+        margin-left: -80px;
+    }
+}
+.date{
+    margin-bottom: 5px;
+}
+@media (max-width: 430px) {
+    .date {
+        margin-bottom: 2px;
+        font-size: 12px;
+    }
+}
+.tag{
+    margin-bottom: 10px;
+}
+@media (max-width: 430px) {
+    .rate{
+        margin-left: -80px;
+    }
+}
+
+.rated-circle {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    margin-left: 213px;
+    margin-top: 26px;
+    border-radius: 20px;
+    border: 2px solid;
+    display: flex;
+    justify-content: center;
+}
+@media (max-width: 430px) {
+    .rated-circle{
+        margin-left: 260px;
+        margin-top: 5px;
+    }
+}
+.bad-rated {
+    border-color: #E90000;
+}
+.so-rated {
+    border-color: #E97E00;
+}
+.normal-rated {
+    border-color: #E9D100;
+}
+.good-rated {
+    border-color: #66E900;
+}
+
+.rated-text {
+    align-self: center;
+}
