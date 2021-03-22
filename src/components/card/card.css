@@ -68,8 +68,13 @@
         font-size: 12px;
     }
 }
-.tag{
-    margin-bottom: 10px;
+.tag {
+    margin-bottom: 5px;
+}
+@media (max-width: 430px) {
+    .tag {
+        margin-bottom: 10px;
+    }
 }
 @media (max-width: 430px) {
     .rate{
