@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tag , Rate } from "antd";
 import { format } from 'date-fns'
+import classnames from 'classnames'
 import './card.css'
 
 
@@ -37,12 +38,7 @@ const Card  = ({ title, date, description, getLessText, genres, poster, voteAver
 
         const genresName = genres.map((el) => <Tag className='tag' key={el.id}>{el.name}</Tag>);
 
-        let classNameOfRated ='rated-circle';
-
-        if (voteAverage < 3) classNameOfRated += ' bad-rated';
-        if (voteAverage > 3 && voteAverage < 5) classNameOfRated += ' so-rated';
-        if(voteAverage > 5 && voteAverage < 7) classNameOfRated += ' normal-rated';
-        if(voteAverage >= 7) classNameOfRated += ' good-rated';
+        const classNameOfRated = classnames('rated-circle',{'bad-rated': voteAverage < 3}, {'so-rated': voteAverage > 3 && voteAverage < 5}, {'normal-rated':voteAverage > 5 && voteAverage < 7}, {'good-rated': voteAverage >= 7 })
 
         return (
             <div className='card'>
