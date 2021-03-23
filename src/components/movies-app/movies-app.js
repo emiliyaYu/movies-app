@@ -24,7 +24,6 @@ class MoviesApp extends Component {
         isCookieSendingAgree: localStorage.getItem('isCookieSendingAgree'),
         guestId: localStorage.getItem('sessionId'),
         personalData:  [],
-        ratedData: []
     }
 
     instLocalStorage  = {
@@ -45,8 +44,7 @@ class MoviesApp extends Component {
         const isAgreeCookie = this.instLocalStorage.get('isCookieSendingAgree') === 'true';
         const guestId = isAgreeCookie ? this.instLocalStorage.get('sessionId') : '';
         const personalData = isAgreeCookie ? this.instLocalStorage.get('personalData') : [];
-        const ratedData = isAgreeCookie ? this.instLocalStorage.get('ratedData') : [];
-        this.setState({ personalData, guestId, ratedData });
+        this.setState({ personalData, guestId});
     }
 
     isError = () => {
@@ -173,14 +171,7 @@ class MoviesApp extends Component {
             }
         })
     }
-    
-    handleRatedMovies = () => {
-        const personalData = this.instLocalStorage.get('personalData');
-        const ratedData = personalData.filter((el) => el.rate);
-        this.setState({ratedData})
-        this.instLocalStorage.set('ratedData', ratedData)
 
-    }
 
     getLessText = (text) => {
         let newString = '';
@@ -195,7 +186,8 @@ class MoviesApp extends Component {
 
     render() {
         const { TabPane } = Tabs;
-        const { isLoading ,isError } = this.state;
+        const { isLoading ,isError, personalData } = this.state;
+        const ratedMovies = personalData.filter((el) => el.rate)
 
         if(isLoading) return <Spinner />
         if(isError) return <ErrorMessage/>;
@@ -210,19 +202,15 @@ class MoviesApp extends Component {
                             filmsData={this.state.personalData}
                             guestId={this.state.guestId}
                             getLessText={this.getLessText}
-                            onLoad={this.state.isLoading}
-                            getRatedData = {this.getRatedData}
-                            ratedMovies={this.handleRatedMovies}/>
+                            getRatedData = {this.getRatedData}/>
                         <MainPagination
                             onChangePage={this.handleChangePage}
                             page={this.state.page}/>
                     </TabPane>
                     <TabPane tab='Rated' key='2'>
-                        <RatedList filmsData={this.state.ratedData}
+                        <RatedList filmsData={ratedMovies}
                                    guestId={this.state.guestId}
                                    getLessText={this.getLessText}
-                                   onLoad={this.state.isLoading}
-                                   ratedMovies={this.handleRatedMovies}
                                    getRatedData = {this.getRatedData}/>
                     </TabPane>
                 </Tabs>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Card from "../card/card";
 
 
-const RatedList = ({filmsData, getLessText, guestId, onRatedMovies, rated}) => {
+const RatedList = ({filmsData, getLessText, guestId, rated}) => {
     const elements = filmsData.map((el) => <Card title={el.title}
                      description={el.overview}
                      date={el.release_date}
@@ -13,7 +13,6 @@ const RatedList = ({filmsData, getLessText, guestId, onRatedMovies, rated}) => {
                      id={el.id}
                      poster={el.poster_path}
                      voteAverage={el.vote_average}
-                     onRatedMovies={onRatedMovies}
                      rate={el.rate}
                      guestId={guestId}
                      filmsData={filmsData}
@@ -25,16 +24,14 @@ const RatedList = ({filmsData, getLessText, guestId, onRatedMovies, rated}) => {
     )
 }
 RatedList.defaultProps = {
-    filmsData: null,
-    getLessText: null,
-    onRatedMovies: null,
+    filmsData: [],
+    getLessText: ()=>{},
     guestId: '',
-    rated: null
+    rated: ()=>{}
 }
 RatedList.propTypes = {
     filmsData: PropTypes.arrayOf(Object),
     getLessText: PropTypes.func,
-    onRatedMovies: PropTypes.func,
     guestId: PropTypes.string,
     rated: PropTypes.func
 }

@@ -8,8 +8,8 @@ const MainPagination = ({onChangePage, page}) => (
     )
 
 MainPagination.defaultProps = {
-    onChangePage: null,
-    page: null
+    onChangePage: ()=>{},
+    page: 1
 }
 MainPagination.propTypes = {
     onChangePage: PropTypes.func,

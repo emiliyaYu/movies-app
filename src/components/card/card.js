@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import './card.css'
 
 
-const Card  = ({ title, date, description, getLessText, genres, poster, voteAverage, rate, getRatedData, ratedMovies, id}) =>  {
+const Card  = ({ title, date, description, getLessText, genres, poster, voteAverage, rate, getRatedData, id}) =>  {
 
     const formatDate = (time) => {
             if(time === undefined || time === null || time === '') {
@@ -31,7 +31,6 @@ const Card  = ({ title, date, description, getLessText, genres, poster, voteAver
             if (request.ok) {
                 localStorage.setItem(JSON.stringify(id), JSON.stringify(count));
                 getRatedData(id);
-                ratedMovies();
             }
 
         }
@@ -63,14 +62,13 @@ Card.defaultProps = {
     title: '',
     date: '',
     description: '',
-    getLessText: null,
+    getLessText: ()=>{},
     genres: [],
     poster: '',
-    voteAverage: null,
-    ratedMovies: null,
-    rate: null,
-    id: null,
-    getRatedData: null
+    voteAverage: 0,
+    rate: 0,
+    id: 0,
+    getRatedData: ()=>{}
 }
 Card.propTypes = {
     title: PropTypes.string,
@@ -83,6 +81,5 @@ Card.propTypes = {
     rate: PropTypes.number,
     id: PropTypes.number,
     getRatedData: PropTypes.func,
-    ratedMovies: PropTypes.func
 }
 export default Card;

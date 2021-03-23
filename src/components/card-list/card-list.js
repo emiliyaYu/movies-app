@@ -5,7 +5,7 @@ import './cartd-list.css';
 
 
 
-const CardList = ({filmsData, getLessText, onRatedMovies, guestId, getRatedData, ratedMovies}) => {
+const CardList = ({filmsData, getLessText, onRatedMovies, guestId, getRatedData}) => {
 
     const elements = filmsData.map((el) => (
                 <Card title={el.title}
@@ -22,7 +22,6 @@ const CardList = ({filmsData, getLessText, onRatedMovies, guestId, getRatedData,
                     guestId={guestId}
                     filmsData={filmsData}
                     getRatedData={getRatedData}
-                    ratedMovies={ratedMovies}
                 />
                 ))
     return (
@@ -34,12 +33,11 @@ const CardList = ({filmsData, getLessText, onRatedMovies, guestId, getRatedData,
 
 }
 CardList.defaultProps = {
-    filmsData: null,
-    getLessText: null,
-    onRatedMovies: null,
+    filmsData: [],
+    getLessText: ()=>{},
+    onRatedMovies: ()=>{},
     guestId: '',
-    getRatedData: null,
-    ratedMovies: null
+    getRatedData: ()=>{},
 }
 CardList.propTypes = {
     filmsData: PropTypes.arrayOf(Object),
@@ -47,6 +45,5 @@ CardList.propTypes = {
     onRatedMovies: PropTypes.func,
     guestId: PropTypes.string,
     getRatedData: PropTypes.func,
-    ratedMovies: PropTypes.func
 }
 export default CardList;

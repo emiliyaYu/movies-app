@@ -9,7 +9,7 @@ const Search = ({onSearch}) => (
             <Input placeholder="Type to search" className='search' size='large' onChange={debounce(onSearch, 2000)} />
         )
 Search.defaultProps = {
-    onSearch: null,
+    onSearch: ()=>{},
 
 }
 Search.propTypes = {

@@ -32,7 +32,7 @@ const AlertMessage = ({getAgreeSaveCookies, isCookieSendingAgree}) => {
 }
 
 AlertMessage.defaultProps = {
-    getAgreeSaveCookies: null,
+    getAgreeSaveCookies: ()=>{},
     isCookieSendingAgree: 'true'
 }
 AlertMessage.propTypes = {
