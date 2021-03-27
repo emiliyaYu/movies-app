@@ -27,12 +27,14 @@ RatedList.defaultProps = {
     filmsData: [],
     getLessText: ()=>{},
     guestId: '',
-    rated: ()=>{}
+    rated: ()=>{},
+
 }
 RatedList.propTypes = {
     filmsData: PropTypes.arrayOf(Object),
     getLessText: PropTypes.func,
     guestId: PropTypes.string,
-    rated: PropTypes.func
+    rated: PropTypes.func,
+
 }
 export default RatedList;

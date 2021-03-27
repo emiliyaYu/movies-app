@@ -24,6 +24,7 @@ class MoviesApp extends Component {
         isCookieSendingAgree: localStorage.getItem('isCookieSendingAgree'),
         guestId: localStorage.getItem('sessionId'),
         personalData:  [],
+        ratedData: []
     }
 
     instLocalStorage  = {
@@ -153,7 +154,7 @@ class MoviesApp extends Component {
 
     }
     
-    getRatedData = (id) => {
+    getSaveRated = (id) => {
         const value = this.instLocalStorage.get(id);
         this.setState(({personalData}) => {
             const newData = personalData.map((el) => {
@@ -166,12 +167,22 @@ class MoviesApp extends Component {
                 return result;
             });
             this.instLocalStorage.set('personalData', newData);
+
             return {
                 personalData: this.instLocalStorage.get('personalData')
             }
         })
     }
 
+    // eslint-disable-next-line no-unused-vars
+    handleRatedMovies = async (key = 2) => {
+        const guestId = this.instLocalStorage.get('sessionId');
+        const request = await this.service.getRequest(`https://api.themoviedb.org/3/guest_session/${guestId}/rated/movies?api_key=0182a56e634228c21690fb3267265463`);
+        const newData = this.addRating(request.results)
+        this.setState(() => ({
+            ratedData: newData
+        }))
+    }
 
     getLessText = (text) => {
         let newString = '';
@@ -186,8 +197,7 @@ class MoviesApp extends Component {
 
     render() {
         const { TabPane } = Tabs;
-        const { isLoading ,isError, personalData } = this.state;
-        const ratedMovies = personalData.filter((el) => el.rate)
+        const { isLoading ,isError } = this.state;
 
         if(isLoading) return <Spinner />
         if(isError) return <ErrorMessage/>;
@@ -195,23 +205,23 @@ class MoviesApp extends Component {
             <div className='list-film'>
                 <AlertMessage getAgreeSaveCookies={this.handleAgreeSaveCookies}
                          isCookieSendingAgree={this.state.isCookieSendingAgree}/>
-                <Tabs centered>
+                <Tabs centered onTabClick={this.handleRatedMovies}>
                     <TabPane tab='Search' key='1' className='tab-list'>
                         <Search onSearch={this.handleSearch}/>
                         <CardList
                             filmsData={this.state.personalData}
                             guestId={this.state.guestId}
                             getLessText={this.getLessText}
-                            getRatedData = {this.getRatedData}/>
+                            getRatedData={this.getSaveRated}/>
                         <MainPagination
                             onChangePage={this.handleChangePage}
                             page={this.state.page}/>
                     </TabPane>
                     <TabPane tab='Rated' key='2'>
-                        <RatedList filmsData={ratedMovies}
+                        <RatedList filmsData={this.state.ratedData}
                                    guestId={this.state.guestId}
                                    getLessText={this.getLessText}
-                                   getRatedData = {this.getRatedData}/>
+                                   getRatedData={this.getSaveRated}/>
                     </TabPane>
                 </Tabs>
             </div>

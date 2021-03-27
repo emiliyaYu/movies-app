@@ -5,9 +5,8 @@ import './alert-message.css';
 
 
 const AlertMessage = ({getAgreeSaveCookies, isCookieSendingAgree}) => {
-    
 
-    if(isCookieSendingAgree) {
+    if(isCookieSendingAgree !== null) {
         return null;
     }
     return (
@@ -33,10 +32,10 @@ const AlertMessage = ({getAgreeSaveCookies, isCookieSendingAgree}) => {
 
 AlertMessage.defaultProps = {
     getAgreeSaveCookies: ()=>{},
-    isCookieSendingAgree: ''
+    isCookieSendingAgree: true
 }
 AlertMessage.propTypes = {
     getAgreeSaveCookies: PropTypes.func,
-    isCookieSendingAgree: PropTypes.string
+    isCookieSendingAgree: PropTypes.bool
 }
 export default AlertMessage;

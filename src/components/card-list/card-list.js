@@ -21,7 +21,7 @@ const CardList = ({filmsData, getLessText, onRatedMovies, guestId, getRatedData}
                     rate={el.rate}
                     guestId={guestId}
                     filmsData={filmsData}
-                    getRatedData={getRatedData}
+                      getRatedData={getRatedData}
                 />
                 ))
     return (
@@ -37,13 +37,13 @@ CardList.defaultProps = {
     getLessText: ()=>{},
     onRatedMovies: ()=>{},
     guestId: '',
-    getRatedData: ()=>{},
+    getRatedData: ()=>{}
 }
 CardList.propTypes = {
     filmsData: PropTypes.arrayOf(Object),
     getLessText: PropTypes.func,
     onRatedMovies: PropTypes.func,
     guestId: PropTypes.string,
-    getRatedData: PropTypes.func,
+    getRatedData: PropTypes.func
 }
 export default CardList;

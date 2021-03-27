@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import './card.css'
 
 
-const Card  = ({ title, date, description, getLessText, genres, poster, voteAverage, rate, getRatedData, id}) =>  {
+const Card  = ({ title, date, description, getLessText, genres, poster, voteAverage, rate, id, getRatedData}) =>  {
 
     const formatDate = (time) => {
             if(time === undefined || time === null || time === '') {
@@ -31,10 +31,10 @@ const Card  = ({ title, date, description, getLessText, genres, poster, voteAver
             if (request.ok) {
                 localStorage.setItem(JSON.stringify(id), JSON.stringify(count));
                 getRatedData(id);
+
             }
 
         }
-
         const genresName = genres.map((el) => <Tag className='tag' key={el.id}>{el.name}</Tag>);
 
         const classNameOfRated = classnames('rated-circle',{'bad-rated': voteAverage < 3}, {'so-rated': voteAverage > 3 && voteAverage < 5}, {'normal-rated':voteAverage > 5 && voteAverage < 7}, {'good-rated': voteAverage >= 7 })
@@ -80,6 +80,6 @@ Card.propTypes = {
     voteAverage: PropTypes.number,
     rate: PropTypes.number,
     id: PropTypes.number,
-    getRatedData: PropTypes.func,
+    getRatedData: PropTypes.func
 }
 export default Card;
