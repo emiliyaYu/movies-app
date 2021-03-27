@@ -18,23 +18,23 @@ const Card  = ({ title, date, description, getLessText, genres, poster, voteAver
                 const day = format(new Date(time), 'd');
                 return `${month} ${day}, ${year}`;
 
-        }
+    }
 
-        const handleGetRatedMovie = async (count) => {
-            const request = await fetch(`https://api.themoviedb.org/3/movie/${id}/rating?api_key=0182a56e634228c21690fb3267265463&guest_session_id=${JSON.parse(localStorage.getItem('sessionId'))}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': "application/json;charset=utf-8"
-                },
-                body: JSON.stringify({"value": count})
+    const handleGetRatedMovie = async (count) => {
+        const request = await fetch(`https://api.themoviedb.org/3/movie/${id}/rating?api_key=0182a56e634228c21690fb3267265463&guest_session_id=${JSON.parse(localStorage.getItem('sessionId'))}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': "application/json;charset=utf-8"
+            },
+            body: JSON.stringify({"value": count})
             })
-            if (request.ok) {
-                localStorage.setItem(JSON.stringify(id), JSON.stringify(count));
-                getRatedData(id);
 
-            }
-
+        if (request.ok) {
+            localStorage.setItem(JSON.stringify(id), JSON.stringify(count));
+            getRatedData(id);
         }
+    }
+
         const genresName = genres.map((el) => <Tag className='tag' key={el.id}>{el.name}</Tag>);
 
         const classNameOfRated = classnames('rated-circle',{'bad-rated': voteAverage < 3}, {'so-rated': voteAverage > 3 && voteAverage < 5}, {'normal-rated':voteAverage > 5 && voteAverage < 7}, {'good-rated': voteAverage >= 7 })

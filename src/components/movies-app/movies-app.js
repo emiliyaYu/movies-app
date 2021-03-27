@@ -140,10 +140,9 @@ class MoviesApp extends Component {
     }
 
     handleAgreeSaveCookies = async () => {
-        const request = await fetch(`https://api.themoviedb.org/3/authentication/guest_session/new?api_key=0182a56e634228c21690fb3267265463`);
-        const result = await request.json();
-        const sessionId = result.guest_session_id;
-        const expires = new Date(result.expires_at).toUTCString();
+        const request = await this.service.getRequest(`https://api.themoviedb.org/3/authentication/guest_session/new?api_key=0182a56e634228c21690fb3267265463`);
+        const sessionId = request.guest_session_id;
+        const expires = new Date(request.expires_at).toUTCString();
         localStorage.setItem('isCookieSendingAgree', 'true');
         document.cookie = `sessionId=${sessionId};path=/;expires=${expires}`;
         this.instLocalStorage.set('sessionId', sessionId);
@@ -151,7 +150,6 @@ class MoviesApp extends Component {
             guestId: this.instLocalStorage.get('sessionId'),
             isCookieSendingAgree: this.instLocalStorage.get('isCookieSendingAgree')
         }))
-
     }
     
     getSaveRated = (id) => {
