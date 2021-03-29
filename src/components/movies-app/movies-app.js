@@ -174,12 +174,16 @@ class MoviesApp extends Component {
 
     // eslint-disable-next-line no-unused-vars
     handleRatedMovies = async (key = 2) => {
-        const guestId = this.instLocalStorage.get('sessionId');
-        const request = await this.service.getRequest(`https://api.themoviedb.org/3/guest_session/${guestId}/rated/movies?api_key=0182a56e634228c21690fb3267265463`);
-        const newData = this.addRating(request.results)
-        this.setState(() => ({
-            ratedData: newData
-        }))
+        const cookie = this.state.isCookieSendingAgree;
+        if(cookie !== null) {
+            const guestId = this.instLocalStorage.get('sessionId');
+            const request = await this.service.getRequest(`https://api.themoviedb.org/3/guest_session/${guestId}/rated/movies?api_key=0182a56e634228c21690fb3267265463`);
+            const newData = this.addRating(request.results)
+            this.setState(() => ({
+                ratedData: newData
+            }))
+        }
+
     }
 
     getLessText = (text) => {
