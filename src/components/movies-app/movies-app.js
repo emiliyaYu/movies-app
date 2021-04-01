@@ -41,7 +41,7 @@ class MoviesApp extends Component {
             localStorage.clear();
             this.setState(() => ({
                 guestId: null,
-                isCookieSendingAgree: false
+                isCookieSendingAgree: null
             }))
         }
         const isAgreeCookie = instLocalStorage.get('isCookieSendingAgree') === 'true';
