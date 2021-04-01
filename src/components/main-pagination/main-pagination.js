@@ -4,7 +4,7 @@ import { Pagination }  from 'antd';
 import './main-pagination.css';
 
 const MainPagination = ({onChangePage, page, total}) => {
-    if(total === null || total === 0){
+    if(total === null || total <= 1){
         return null;
     }
     return (
