@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tag , Rate } from "antd";
+import {Tag, Rate } from "antd";
 import { format } from 'date-fns'
 import classnames from 'classnames'
-import './card.css'
+import './card.css';
+import getLessText from "../../utilts/get-less-text";
+import genresContext from "../../utilts/context";
+import openNotificationWithIcon from "../../utilts/notifications";
 
 
-const Card  = ({ title, date, description, getLessText, genres, poster, voteAverage, rate, id, getRatedData}) =>  {
-
+const Card = ({ title, date, description, poster, voteAverage, rate, id, getRatedData, genres}) => {
+    
     const formatDate = (time) => {
             if(time === undefined || time === null || time === '') {
                 return 'No date...';
@@ -20,26 +23,31 @@ const Card  = ({ title, date, description, getLessText, genres, poster, voteAver
 
     }
 
+
     const handleGetRatedMovie = async (count) => {
-        const request = await fetch(`https://api.themoviedb.org/3/movie/${id}/rating?api_key=0182a56e634228c21690fb3267265463&guest_session_id=${JSON.parse(localStorage.getItem('sessionId'))}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': "application/json;charset=utf-8"
-            },
-            body: JSON.stringify({"value": count})
+        try {
+            const request = await fetch(`https://api.themoviedb.org/3/movie/${id}/rating?api_key=0182a56e634228c21690fb3267265463&guest_session_id=${JSON.parse(localStorage.getItem('sessionId'))}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': "application/json;charset=utf-8"
+                },
+                body: JSON.stringify({"value": count})
             })
 
-        if (request.ok) {
-            localStorage.setItem(JSON.stringify(id), JSON.stringify(count));
-            getRatedData(id);
+            if (request.ok) {
+                localStorage.setItem(JSON.stringify(id), JSON.stringify(count));
+                getRatedData(id);
+            }
         }
+        catch {
+          openNotificationWithIcon('error', 'Rate failed.', 'Rate failed. Try again.');
+        }
+
     }
 
-        const genresName = genres.map((el) => <Tag className='tag' key={el.id}>{el.name}</Tag>);
+    const classNameOfRated = classnames('rated-circle',{'bad-rated': voteAverage < 3}, {'so-rated': voteAverage > 3 && voteAverage < 5}, {'normal-rated':voteAverage > 5 && voteAverage < 7}, {'good-rated': voteAverage >= 7 })
 
-        const classNameOfRated = classnames('rated-circle',{'bad-rated': voteAverage < 3}, {'so-rated': voteAverage > 3 && voteAverage < 5}, {'normal-rated':voteAverage > 5 && voteAverage < 7}, {'good-rated': voteAverage >= 7 })
-
-        return (
+    return (
             <div className='card'>
                 <img src={`https://image.tmdb.org/t/p/original${poster}`} alt="poster" className='image'/>
                 <div className='info'>
@@ -48,21 +56,30 @@ const Card  = ({ title, date, description, getLessText, genres, poster, voteAver
                         <span className='rated-text'>{voteAverage}</span>
                     </div>
                     <div className='date'>{formatDate(date) }</div>
-                    <div className='genres'>
-                        {genresName}
-                    </div>
+                    <genresContext.Consumer>
+                        {value => {
+                            const filtered = value.filter((el) => genres.some((it) => el.id === it));
+                            const genresName = filtered.map((gen) => <Tag className='tag' key={gen.id}>{gen.name}</Tag>);
+                            return (
+                                <div className='genres'>
+                                    {genresName}
+                                </div>
+                            )
+                        }}
+                       
+                    </genresContext.Consumer>
                     <div className='description'>{getLessText(description)}</div>
                     <Rate onChange={handleGetRatedMovie} value={rate} className='rate'/>
                 </div>
             </div>
-        )
+    )
+
 };
 
 Card.defaultProps = {
     title: '',
     date: '',
     description: '',
-    getLessText: ()=>{},
     genres: [],
     poster: '',
     voteAverage: 0,
@@ -74,7 +91,6 @@ Card.propTypes = {
     title: PropTypes.string,
     date: PropTypes.string,
     description: PropTypes.string,
-    getLessText: PropTypes.func,
     genres: PropTypes.arrayOf(Object),
     poster: PropTypes.string,
     voteAverage: PropTypes.number,

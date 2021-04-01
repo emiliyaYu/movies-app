@@ -21,13 +21,23 @@ body {
     position: relative;
 }
 
-@media (max-width: 430px) {
+@media (min-width: 430px) and (max-width: 768px) {
    .list-film {
        max-width: 420px;
        align-self: center;
    }
     .tab-list {
         max-width: 420px;
+        align-self: center;
+    }
+}
+@media (min-width: 769px) and (max-width: 1009px) {
+    .list-film{
+        max-width: 790px;
+        align-self: center;
+    }
+    .tab-list {
+        max-width: 790px;
         align-self: center;
     }
 }

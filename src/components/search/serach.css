@@ -4,8 +4,13 @@
     width: 930px;
     align-self: center;
 }
-@media (max-width: 430px) {
+@media (min-width: 430px) and (max-width: 768px) {
     .search{
         width: 388px;
+    }
+}
+@media (min-width: 769px) and (max-width: 1009px) {
+    .search{
+        width: 600px;
     }
 }

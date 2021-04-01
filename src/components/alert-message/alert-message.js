@@ -4,8 +4,7 @@ import { Alert, Button, Space } from 'antd';
 import './alert-message.css';
 
 
-const AlertMessage = ({getAgreeSaveCookies, isCookieSendingAgree}) => {
-
+const AlertMessage = ({isCookieSendingAgree, getAgreeSaveCookies}) => {
     if(isCookieSendingAgree !== null) {
         return null;
     }
