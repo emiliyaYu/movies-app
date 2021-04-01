@@ -135,6 +135,9 @@ class MoviesApp extends Component {
      // сохраняем куки
     handleAgreeSaveCookies = async () => {
       await this.service.handleAgreeSaveCookie();
+      this.setState(() => ({
+          isCookieSendingAgree: instLocalStorage.get('isCookieSendingAgree')
+      }))
     }
 
     // сохраняем рейтинг
