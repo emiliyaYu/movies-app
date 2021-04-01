@@ -36,7 +36,14 @@ class MoviesApp extends Component {
 
 
     componentDidMount() {
-
+        const cookie = this.state.isCookieSendingAgree;
+        if(cookie === null) {
+            localStorage.clear();
+            this.setState(() => ({
+                guestId: null,
+                isCookieSendingAgree: false
+            }))
+        }
         const isAgreeCookie = instLocalStorage.get('isCookieSendingAgree') === 'true';
         const guestId = isAgreeCookie ? instLocalStorage.get('sessionId') : '';
         const personalData = isAgreeCookie ? instLocalStorage.get('personalData') : [];
