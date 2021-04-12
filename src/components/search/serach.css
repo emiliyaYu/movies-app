@@ -1,12 +1,13 @@
 .search {
     margin-top: 30px;
     margin-bottom: 20px;
-    width: 930px;
+
     align-self: center;
+    width: 388px;
 }
-@media (min-width: 430px) and (max-width: 768px) {
+@media (min-width: 1010px) {
     .search{
-        width: 388px;
+        width: 930px;
     }
 }
 @media (min-width: 769px) and (max-width: 1009px) {

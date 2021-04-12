@@ -1,10 +1,17 @@
 .container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    flex-direction: column;
 }
-@media (min-width: 430px) and (max-width: 1009px) {
+@media (min-width: 768px){
     .container{
-        flex-wrap: nowrap;
-        flex-direction: column;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+}
+@media (min-width: 1010px){
+    .container{
+        flex-wrap: wrap;
+
     }
 }

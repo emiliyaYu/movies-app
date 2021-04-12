@@ -2,31 +2,32 @@ import React, { Component } from 'react';
 import 'antd/dist/antd.css'
 import {Tabs} from 'antd'
 import CardList from "../card-list";
-import ApiService from "../../utilts/api-service";
-import Spinner from "../spinner";
+import ApiService from "../../services/api-service";
 import ErrorMessage from "../error-message";
 import MainPagination from "../main-pagination";
 import Search from "../search";
 import AlertMessage from "../alert-message";
 import './movies-app.css';
 import instLocalStorage from "../../utilts/inst-loscalStorage";
+import InstLocalStore from "../../services/local-storage";
 import genresContext from "../../utilts/context";
-import openNotificationWithIcon from "../../utilts/notifications";
+import openNotificationWithIcon from "../notification";
 
 
 class MoviesApp extends Component {
 
     service = new ApiService();
 
+    localStore = new InstLocalStore();
 
     state = {
-        isLoading: true,
+        isLoading: false,
         isError: false,
         currentValue: null,
         pageOnSearch: 1,
         pageOnRated: 1,
-        isCookieSendingAgree: instLocalStorage.get('isCookieSendingAgree'),
-        guestId: instLocalStorage.get('sessionId'),
+        isCookieSendingAgree: this.localStore.getCookieAgree(),
+        guestId: this.localStore.getSessionId(),
         personalData:  [],
         ratedData: [],
         genresData: [],
@@ -44,20 +45,26 @@ class MoviesApp extends Component {
                 isCookieSendingAgree: null
             }))
         }
-        const isAgreeCookie = instLocalStorage.get('isCookieSendingAgree') === 'true';
-        const guestId = isAgreeCookie ? instLocalStorage.get('sessionId') : '';
-        const personalData = isAgreeCookie ? instLocalStorage.get('personalData') : [];
+        const isAgreeCookie = this.localStore.getCookieAgree() === 'true';
+        const guestId = isAgreeCookie ? this.localStore.getSessionId() : '';
+        const personalData = isAgreeCookie ? this.localStore.getPersonalData() : [];
         this.setState({ personalData, guestId, isLoading: false});
         this.getGenres();
         this.handleRatedMovies();
     }
 
     // получаем жанры
-    getGenres = async () =>{
-        const genresData = await this.service.getGenres();
-        this.setState(() => ({
-            genresData: genresData.genres
-        }))
+    getGenres = async () => {
+        try {
+            const genresData = await this.service.getGenres();
+            this.setState(() => ({
+                genresData: genresData.genres
+            }))
+        }
+        catch {
+            this.isError();
+        }
+
     }
 
     // ошибки
@@ -69,7 +76,7 @@ class MoviesApp extends Component {
 
 
     // поиск
-     handleSearch = async (event) => {
+    handleSearch = async (event) => {
         const targetValue = event.target.value.trim();
         this.setState(() =>({
             isLoading: true
@@ -132,12 +139,12 @@ class MoviesApp extends Component {
         }))
     }
 
-     // сохраняем куки
+    // сохраняем куки
     handleAgreeSaveCookies = async () => {
-      await this.service.handleAgreeSaveCookie();
-      this.setState(() => ({
-          isCookieSendingAgree: instLocalStorage.get('isCookieSendingAgree')
-      }))
+        await this.service.handleAgreeSaveCookie();
+        this.setState(() => ({
+            isCookieSendingAgree: this.localStore.getCookieAgree()
+        }))
     }
 
     // сохраняем рейтинг
@@ -153,10 +160,10 @@ class MoviesApp extends Component {
                 }
                 return result;
             });
-            instLocalStorage.set('personalData', newData);
+            this.localStore.setPersonalData(newData)
 
             return {
-                personalData: instLocalStorage.get('personalData')
+                personalData: this.localStore.getPersonalData()
             }
         })
     }
@@ -195,15 +202,13 @@ class MoviesApp extends Component {
 
     render() {
         const { TabPane } = Tabs;
-        const { isError, isLoading} = this.state;
+        const { isError } = this.state;
 
-
-        if(isLoading) return <Spinner />
         if(isError) return <ErrorMessage/>;
         return (
             <div className='list-film'>
                 <AlertMessage getAgreeSaveCookies={this.handleAgreeSaveCookies}
-                         isCookieSendingAgree={this.state.isCookieSendingAgree}/>
+                              isCookieSendingAgree={this.state.isCookieSendingAgree}/>
                 <genresContext.Provider value={this.state.genresData}>
                     <Tabs centered onTabClick={this.handleRatedMovies}>
                         <TabPane tab='Search' key='search' className='tab-list'>
@@ -212,6 +217,7 @@ class MoviesApp extends Component {
                                 filmsData={this.state.personalData}
                                 guestId={this.state.guestId}
                                 getRatedData={this.getSaveRated}
+                                isLoading={this.state.isLoading}
                             />
                             <MainPagination
                                 onChangePage={this.handleChangePage}
@@ -224,6 +230,7 @@ class MoviesApp extends Component {
                                       guestId={this.state.guestId}
                                       getRatedData={this.getSaveRated}
                                       genresData={this.state.genresData}
+                                      isLoading={this.state.isLoading}
                             />
                             <MainPagination
                                 onChangePage={this.handleChangePageOnRated}

@@ -1,6 +1,11 @@
-import instLocalStorage from "./inst-loscalStorage";
+import instLocalStorage from "../utilts/inst-loscalStorage";
+import InstLocalStore from "./local-storage";
+import setIdCookies from "./cookie";
+import openNotificationWithIcon from "../components/notification";
 
 class ApiService {
+
+    localStore = new InstLocalStore();
 
     basicUrl = 'https://api.themoviedb.org/3';
 
@@ -12,8 +17,8 @@ class ApiService {
         if(!request.ok) {
             throw new Error('Oops! Something went wrong...');
         }
-        const text = request.json();
-       return text;
+        const respose = request.json();
+        return respose;
     }
 
     getGenres = async () => {
@@ -28,23 +33,43 @@ class ApiService {
         const totalData = data.total_results;
         return {data: dataResult, totalPage: totalData};
     }
-    
+
     getRatedMovies = async (pageNumber) => {
         const guestId = instLocalStorage.get('sessionId');
         const request = await this.getRequest(`${this.basicUrl}/guest_session/${guestId}/rated/movies?api_key=${this.apiKey}&page=${pageNumber}`);
         const newData = request.results;
         const totalData = request.total_results;
         return {data: newData, totalPage: totalData};
-        
+
     }
 
     handleAgreeSaveCookie = async() => {
         const request = await this.getRequest(`${this.basicUrl}/authentication/guest_session/new?api_key=${this.apiKey}`);
         const sessionId = request.guest_session_id;
         const expires = new Date(request.expires_at).toUTCString();
-        instLocalStorage.set('isCookieSendingAgree', 'true');
-        document.cookie = `sessionId=${sessionId};path=/;expires=${expires}`;
-        instLocalStorage.set('sessionId', sessionId);
+        this.localStore.setCookiesAgree();
+        setIdCookies(sessionId, expires)
+        this.localStore.setSessionId(sessionId)
+    }
+
+    handleSetRatedMovie = (count) => async (id, getRatedData) => {
+        try {
+            const request = await fetch(`https://api.themoviedb.org/3/movie/${id}/rating?api_key=0182a56e634228c21690fb3267265463&guest_session_id=${this.localStore.getSessionId()}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': "application/json;charset=utf-8"
+                },
+                body: JSON.stringify({"value": count})
+            })
+
+            if (request.ok) {
+                this.localStore.setRateOfMovie(id, count)
+                getRatedData(id);
+            }
+        }
+        catch {
+            openNotificationWithIcon('error', 'Rate failed.', 'Rate failed. Try again.');
+        }
     }
 }
 export default ApiService;

@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Card from "../card";
+import Spinner from "../spinner";
 import './cartd-list.css';
 
 
 
 
-const CardList = ({filmsData, getLessText, onRatedMovies, guestId, getRatedData}) => {
 
+const CardList = ({filmsData, getLessText, onRatedMovies, guestId, getRatedData, isLoading}) => {
+    if(filmsData === null) {
+        return null;
+    }
     const elements = filmsData.map((el) => (
                     <Card title={el.title}
                         description={el.overview}
@@ -26,9 +30,10 @@ const CardList = ({filmsData, getLessText, onRatedMovies, guestId, getRatedData}
 
                     />
                 ))
+
     return (
             <div className='container'>
-                {elements}
+                { isLoading === true ? <Spinner/> : elements}
             </div>
 
     )
@@ -40,6 +45,8 @@ CardList.defaultProps = {
     onRatedMovies: ()=>{},
     guestId: '',
     getRatedData: ()=>{},
+
+    isLoading: true
 }
 CardList.propTypes = {
     filmsData: PropTypes.arrayOf(Object),
@@ -47,5 +54,6 @@ CardList.propTypes = {
     onRatedMovies: PropTypes.func,
     guestId: PropTypes.string,
     getRatedData: PropTypes.func,
+    isLoading: PropTypes.bool
 }
 export default CardList;

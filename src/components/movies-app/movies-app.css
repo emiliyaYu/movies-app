@@ -6,38 +6,46 @@ body {
 
 .list-film {
     display: flex;
-    width: 1010px;
+    max-width: 420px;
+    width: 420px;
     flex-direction: column;
     justify-content: center;
     background-color: white;
+    align-self: center;
 }
 .tab-list {
     display: flex;
-    width: 1010px;
+    max-width: 420px;
+    width: 420px;
     flex-direction: column;
     justify-content: center;
+    align-self: center;
 }
 .wrapper {
     position: relative;
 }
 
-@media (min-width: 430px) and (max-width: 768px) {
+@media (min-width: 1010px) {
    .list-film {
-       max-width: 420px;
-       align-self: center;
+       width: 1010px;
+       max-width: 1010px;
+
    }
     .tab-list {
-        max-width: 420px;
-        align-self: center;
+        width: 1010px;
+        max-width: 1010px;
+
     }
 }
 @media (min-width: 769px) and (max-width: 1009px) {
     .list-film{
-        max-width: 790px;
+        max-width: 800px;
+        width: 800px;
         align-self: center;
     }
     .tab-list {
-        max-width: 790px;
+        max-width: 800px;
+        width: 800px;
         align-self: center;
     }
 }

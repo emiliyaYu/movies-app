@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Pagination }  from 'antd';
 import './main-pagination.css';
 
-const MainPagination = ({onChangePage, page, total}) => {
-    if(total === null || total <= 1){
+const MainPagination = ({onChangePage, page, total, currentValue}) => {
+    console.log(currentValue)
+    if(total === null || total <= 1 || currentValue === null){
         return null;
     }
     return (
@@ -16,13 +17,15 @@ MainPagination.defaultProps = {
     onChangePage: ()=>{},
     page: 1,
     // filmsData: [],
-    total: null
+    total: null,
+    currentValue: ''
 }
 MainPagination.propTypes = {
     onChangePage: PropTypes.func,
     page: PropTypes.number,
     // filmsData: PropTypes.arrayOf(Object),
-    total: PropTypes.number
+    total: PropTypes.number,
+    currentValue: PropTypes.string
 }
 export default MainPagination;
     

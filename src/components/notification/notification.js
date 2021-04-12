@@ -4,7 +4,7 @@ const openNotificationWithIcon = (type, title, text) => {
     notification[type]({
         message: title,
         description:
-            text,
+        text,
     });
 };
 export default openNotificationWithIcon;
